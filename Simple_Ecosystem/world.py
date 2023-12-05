@@ -43,9 +43,8 @@ class World():
     Initialize the world with number of creatures.
     '''
     for i in range(0, number):
-      # self.creatures.append(Creature([0,np.random.randint(0,self.y_range)]))
-      # self.creatures=np.hstack((self.creatures,Creature([0,np.random.randint(0,self.y_range)])))
-      self.creatures=np.hstack((self.creatures,Creature([300,300])))
+      self.creatures=np.hstack((self.creatures,Creature([300,np.random.randint(0,self.y_range)])))
+      # self.creatures=np.hstack((self.creatures,Creature([300,300])))
 
   def clear_food(self):
     '''
@@ -63,6 +62,7 @@ class World():
     Generate the food in the world.
     '''
 
+    # 为每一个food找到他的位置
     for i in range(0,number):
       foodnew=[np.random.randint(0,self.x_range),np.random.randint(0,self.y_range)]
       # print(foodnew[1]//self.numBlocksy)

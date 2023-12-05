@@ -4,17 +4,16 @@ from os import system
 from pygame import *
 from matplotlib import pyplot as plt
 
+# 画图的函数
 def plot_stats(creatures,creature_stats):
   '''
   Function to add the plots of the number of creatures
   '''
-
   global fig,ax1,ax2
   plt.cla()
   plt.plot(creature_stats)
   plt.pause(0.1)
   
-
 init()
 clock=time.Clock()
 
@@ -33,7 +32,7 @@ number_of_days = 100
 number_of_moves = 100
 number_of_food = 100
 number_of_steps = 300
-number_of_creatures = 100
+number_of_creatures = 10
 
 world.initialize_creatures(number_of_creatures)
 
@@ -42,8 +41,10 @@ for day in range(0,number_of_days):
   # world.clear_food()
   steps_taken = 0
   world.generate_food(number_of_food)
-  # number_of_food=number_of_food-1
+
+  # number_of_food=number_of_food-10
   number_of_food = max(5,int(np.random.normal(100,25)))
+
   while len(world.food) > 0 and not crashed and steps_taken < number_of_steps:
 
     for i in event.get():
@@ -75,11 +76,11 @@ for day in range(0,number_of_days):
     display.update()
     clock.tick(60)
     steps_taken = steps_taken + 1
-  plot_stats(world.creatures,creature_stats)
+  # plot_stats(world.creatures,creature_stats)
   if crashed:
     break
   world.reset_creatures()
 
-plt.grid(True)
-plt.plot(creature_stats)
-plt.show()
+# plt.grid(True)
+# plt.plot(creature_stats)
+# plt.show()
