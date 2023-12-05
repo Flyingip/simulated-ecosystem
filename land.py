@@ -73,6 +73,10 @@ def rain(Air, Land):
 
 #蒸发作用函数
 def evapo(Land, Air):
+    Land.new_soil_H2O = Land.orig_soil_H2O - Land.evapo_rate
+    Land.orig_soil_H2O = Land.new_soil_H2O
+    Air.new_H2O = Air.orig_soil_H2O + Land.evapo_rate
+    Air.orig_H2O = Air.new_H2O
 
 #光合作用函数（植物&大气
 #呼吸作用函数（植物&大气
