@@ -1,3 +1,5 @@
+from pygame import *
+
 class Land:
     def __init__(self, index): #index为类型序号，0河流 1河边草地 2平原草地 3平原森林 4高山草地 5高山荒地
         self.index = index
@@ -42,6 +44,9 @@ class Land:
         self.fallin_rate = 0.5 * self.qualt_metbls * 0.1 #死亡/掉落消耗植物有机物速率，标准的0.5概率的0.1
         self.orig_soil_C = self.qualt_resc * 10 #初始土壤碳，标准为10
         self.decom_rate = self.qualt_metbls * 0.1 #分解作用消耗土壤有机物速率，标准为0.1
+
+    # lx：以下为可视化函数部分
+    def print_land(self,game_display)
         
 class Air:
     def __init__(self):

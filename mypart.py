@@ -6,3 +6,26 @@
 
 画格子，主函数
 '''
+from pygame import *
+from land import *
+# init()
+
+clock=time.Clock()
+
+# 地图的大小
+
+h=800
+w=800
+
+game_display=display.set_mode((h,w))
+display.set_caption("simulated-ecosystem")
+
+crashed=False
+
+number_of_days =1000
+
+# world
+
+for day in range(0,number_of_days):
+    game_display.fill((255,255,255))
+
