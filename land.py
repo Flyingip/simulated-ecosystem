@@ -84,7 +84,24 @@ def evapo(Land, Air):
     Air.orig_H2O = Air.new_H2O
 
 #光合作用函数（植物&大气
+def photosyn(Land, Air):
+    Land.new_plant_C = Land.orig_plant_C + Land.prodc_rate
+    Land.orig_plant_C = Land.new_plant_C
+    Air.new_air_C = Air.orig_air_C - Land.prodc_rate
+    Air.orig_air_C = Air.new_air_C
+
 #呼吸作用函数（植物&大气
+def respr(Land, Air):
+    Land.new_plant_C = Land.orig_plant_C - Land.respr_rate
+    Land.orig_plant_C = Land.new_plant_C
+    Air.new_air_C = Air.orig_air_C + Land.respr_rate
+    Air.orig_air_C = Air.new_air_C
+
 #死亡掉落函数（植物&土壤
+def falling(Land):
+    Land.new_plant_C = Land.orig_plant_C - Land.fallin_rate
+    Land.orig_plant_C = Land.new_plant_C
+    Land.new_soil_C = Land.orig_soil_C + Land.fallin_rate
+    Land.orig_soil_C = Land.new_soil_C
 #分解作用函数（土壤&大气
 ##12.5  接口：动物尸体 动物呼吸消耗的能量（大气） 动物摄取植物的有机物量
