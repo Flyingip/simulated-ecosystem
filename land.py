@@ -50,8 +50,8 @@ class Land:
         
 class Air:
     def __init__(self):
-        self.orig_air_H2O = 1000 #初始大气水
-        self.orig_air_C = 1000 #初始大气碳
+        self.orig_air_H2O = 10000 #初始大气水
+        self.orig_air_C = 10000 #初始大气碳
         #水汽输送（水量补充）速率
 
 import random as rd
@@ -103,5 +103,23 @@ def falling(Land):
     Land.orig_plant_C = Land.new_plant_C
     Land.new_soil_C = Land.orig_soil_C + Land.fallin_rate
     Land.orig_soil_C = Land.new_soil_C
+
 #分解作用函数（土壤&大气
+def decomp(Land, Air):
+    Land.new_soil_C = Land.orig_soil_C - Land.decom_rate
+    Land.orig_plant_C = Land.new_plant_C
+    Land.new_soil_C = Land.orig_soil_C + Land.decom_rate
+    Land.orig_soil_C = Land.new_soil_C
+
 ##12.5  接口：动物尸体 动物呼吸消耗的能量（大气） 动物摄取植物的有机物量
+def die(Animal, Land):
+    Land.new_soil_C = Land.orig_soil_C# + 动物能量
+    Land.orig_soil_C = Land.new_soil_C
+
+def respr_a(Animal, Land):
+    Land.new_soil_C = Land.orig_soil_C# - 动物呼吸
+    Land.orig_soil_C = Land.new_soil_C
+
+def eat(Animal, Land):
+    Land.new_plant_C = Land.orig_plant_C# - 动物摄入
+    Land.orig_plant_C = Land.new_plant_C
