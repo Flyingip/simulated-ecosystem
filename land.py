@@ -108,8 +108,8 @@ def falling(Land):
 def decomp(Land, Air):
     Land.new_soil_C = Land.orig_soil_C - Land.decom_rate
     Land.orig_plant_C = Land.new_plant_C
-    Land.new_soil_C = Land.orig_soil_C + Land.decom_rate
-    Land.orig_soil_C = Land.new_soil_C
+    Air.new_C = Air.orig_C + Land.decom_rate
+    Air.orig_C = Air.new_C
 
 ##12.5  接口：动物尸体 动物呼吸消耗的能量（大气） 动物摄取植物的有机物量
 def die(Animal, Land):
