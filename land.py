@@ -5,29 +5,29 @@ class Land:
         self.index = index
         match self.index:
             case "0":
-                self.land_type = river
+                self.land_type = "river"
             case "1":
-                self.land_type = riverside_meadow #类型名称
+                self.land_type = "riverside_meadow" #类型名称
                 self.qualt_H2O = 1.5 #水量因子
                 self.qualt_resc = 1 #资源量因子
                 self.qualt_metbls = 1.2 #代谢率因子
             case "2":
-                self.land_type = plain_meadow
+                self.land_type = "plain_meadow"
                 self.qualt_H2O = 1
                 self.qualt_resc = 1
                 self.qualt_metbls = 1
             case "3":
-                self.land_type = plain_forest
+                self.land_type = "plain_forest"
                 self.qualt_H2O = 1
                 self.qualt_resc = 1.5
                 self.qualt_metbls = 1.2
             case "4":
-                self.land_type = mountain_meadow
+                self.land_type = "mountain_meadow"
                 self.qualt_H2O = 0.8
                 self.qualt_resc = 0.8
                 self.qualt_metbls = 0.6
             case "5":
-                self.land_type = mountain_desert
+                self.land_type = "mountain_desert"
                 self.qualt_H2O = 0.6
                 self.qualt_resc = 0.1
                 self.qualt_metbls = 0.3
@@ -46,7 +46,8 @@ class Land:
         self.decom_rate = self.qualt_metbls * 0.1 #分解作用消耗土壤有机物速率，标准为0.1
 
     # lx：以下为可视化函数部分
-    def print_land(self,game_display)
+    def print_land(self,game_display):
+        pass
         
 class Air:
     def __init__(self):
@@ -67,6 +68,7 @@ def flow(Land):
     p = rd.random()
     if(p >= 0.5):
         for i in range(4):
+            pass
             #网格相关inter_flow(Land, Land(i))
 
 #降水函数
