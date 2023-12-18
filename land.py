@@ -6,6 +6,7 @@ class Land:
         self.qualt_H2O = 0
         self.qualt_resc = 0
         self.qualt_metbls = 0
+        self.qualt_rain = 0
         match self.index:
             case 0:
                 self.land_type = "river"
@@ -14,31 +15,36 @@ class Land:
                 self.qualt_H2O = 1.5 #水量因子
                 self.qualt_resc = 1 #资源量因子
                 self.qualt_metbls = 1.2 #代谢率因子
+                self.qualt_rain = 1
             case 2:
                 self.land_type = "plain_meadow"
                 self.qualt_H2O = 1
                 self.qualt_resc = 1
                 self.qualt_metbls = 1
+                self.qualt_rain = 1
             case 3:
                 self.land_type = "plain_forest"
                 self.qualt_H2O = 1
                 self.qualt_resc = 1.5
                 self.qualt_metbls = 1.2
+                self.qualt_rain = 1
             case 4:
                 self.land_type = "mountain_meadow"
                 self.qualt_H2O = 0.8
                 self.qualt_resc = 0.8
                 self.qualt_metbls = 0.6
+                self.qualt_rain = 0.5
             case 5:
                 self.land_type = "mountain_desert"
                 self.qualt_H2O = 0.6
                 self.qualt_resc = 0.1
                 self.qualt_metbls = 0.3
+                self.qualt_rain = 0.5
         ###水循环部分
         self.orig_soil_H2O = self.qualt_H2O * 10 #初始土壤水，标准为10
         self.evapo_rate = self.orig_soil_H2O * 0.1 #蒸发速率，为0.1倍水量
         self.flow_rate = self.orig_soil_H2O * 0.1 #径流速率，为概率0.5的0.1倍水量
-        self.rain_rate = 1 #如有降雨则降雨速率为1
+        self.rain_rate = self.qualt_rain * 1 #降雨速率，标准为1
         self.new_soil_H2O = self.orig_soil_H2O
         ###碳循环部分
         self.orig_plant_C = self.qualt_resc * 10 #初始植物碳，标准为10
@@ -59,20 +65,16 @@ class Air:
         #水汽输送（水量补充）速率
 
 import random as rd
+import numpy as np
 
 #径流函数
 def inter_flow(Land1, Land2):
-    Land1.new_soil_H2O = Land1.orig_soil_H2O - Land1.flow_rate
-    Land1.orig_soil_H2O = Land1.new_soil_H2O
-    Land2.new_soil_H2O = Land2.orig_soil_H2O + Land2.flow_rate
-    Land2.orig_soil_H2O = Land2.new_soil_H2O
-
-def flow(Land):
-    p = rd.random()
-    if(p >= 0.5):
-        for i in range(4):
-            pass
-            #网格相关inter_flow(Land, Land(i))
+    flow_rate = Land1.flow_rate * np.random.normal(0.1, 0.1, 1)
+    if flow_rate > 0:
+        Land1.new_soil_H2O = Land1.orig_soil_H2O - flow_rate
+        Land1.orig_soil_H2O = Land1.new_soil_H2O
+        Land2.new_soil_H2O = Land2.orig_soil_H2O + flow_rate
+        Land2.orig_soil_H2O = Land2.new_soil_H2O
 
 #降水函数
 def rain(Air, Land):
