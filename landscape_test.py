@@ -17,7 +17,7 @@ display.set_caption("simulated-ecosystem")
 land_img = image.load("Land_v1_1.png")
 game_display.blit(land_img, (0, 0))
 
-#地图数据
+#地图数据 初始化
 landscape = [[[] * 4] * 800] * 800
 Land_map = [[Land(0) for _ in range(800)] for _ in range(800)]
 for i in range(0, 800):
@@ -37,7 +37,6 @@ for i in range(0, 800):
             Land_map[i][j] = Land(5)
         else:
             Land_map[i][j] = Land(2)
-        print(Land_map[i][j].qualt_H2O, end=' ')
             
 
 crashed=False
