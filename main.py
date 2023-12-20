@@ -61,7 +61,7 @@ for day in range(number_of_days):
             decomp(Land_map[i][j], air)
             # water cycle
             evapo(Land_map[i][j], air)
-            '''
+            #'''
             neighbors = np.array([[1, 1], [1, -1], [-1, 1], [-1, -1]])
             for orient in range(4):
                 [i1, j1] = [i, j] + neighbors[orient]
@@ -69,12 +69,12 @@ for day in range(number_of_days):
                     flow_off(Land_map[i][j], air)
                 else:
                     inter_flow(Land_map[i][j], Land_map[i1][j1])
-            ''' #网格径流 运行时间长
+            #''' #网格径流 运行时间长
             p = rd.random()
             if p > 0.333:
                 rain(air, Land_map[i][j])
             water_index[i][j] = Land_map[i][j].orig_soil_H2O
-            
+
     # creatures change
 
 plt.ioff()
