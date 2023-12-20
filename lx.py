@@ -7,7 +7,8 @@
 画格子，主函数
 '''
 from pygame import *
-from land import *
+# from land import *
+
 # init()
 
 clock=time.Clock()
@@ -28,4 +29,5 @@ number_of_days =1000
 
 for day in range(0,number_of_days):
     game_display.fill((255,255,255))
+    # 自然运动，生物的运动，打印
 
