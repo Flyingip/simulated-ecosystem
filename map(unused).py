@@ -56,7 +56,7 @@ while running:
         for y in range(height):
             pygame.draw.rect(
                 window,
-                (x / 800 * 255, y / 800 * 255, map_data[x, y]),
+                (map_data[x, y], map_data[x, y], map_data[x, y]),
                 (x * tile_size, y * tile_size, tile_size, tile_size),
             )
 
