@@ -54,8 +54,8 @@ class Land:
         self.rain_rate = self.qualt_rain * 0.5 #降雨速率，标准为0.5
         self.new_soil_H2O = self.orig_soil_H2O
         ###碳循环部分
-        self.orig_plant_C = self.qualt_resc * 100 #初始植物碳，标准为10
-        self.prodc_rate = self.qualt_resc * self.qualt_H2O * 1 #光合作用生产植物有机物速率，标准为1
+        self.orig_plant_C = self.qualt_resc * 100 #初始植物碳，标准为100
+        self.prodc_rate = self.qualt_resc * self.qualt_H2O * 3 #光合作用生产植物有机物速率，标准为3
         self.respr_rate = self.qualt_metbls * 0.5 #呼吸作用消耗植物有机物速率，标准为0.5
         self.fallin_rate = 0.5 * self.qualt_metbls * 0.1 #死亡/掉落消耗植物有机物速率，标准的0.5概率的0.1
         self.orig_soil_C = self.qualt_resc * 10 #初始土壤碳，标准为10
