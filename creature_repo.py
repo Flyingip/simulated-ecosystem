@@ -240,8 +240,9 @@ class biology:
             return 0,c
 
     def eatgrass(self,grass):
-        self.energystorage+=grass[self.setting[0]][self.setting[1]]
-        grass[self.setting[0]][self.setting[1]]=0
+        self.energystorage+=grass[self.setting[0]][self.setting[1]].orig_plant_C
+        #grass[self.setting[0]][self.setting[1]]=0
+        grass[self.setting[0]][self.setting[1]].orig_plant_C=0
 
     def partnership(self):
         if (self.age>=self.ageaverage*0.2)&(self.age<=self.ageaverage*0.3)&(self.baby_is==0):
