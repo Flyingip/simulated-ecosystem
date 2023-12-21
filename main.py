@@ -3,6 +3,7 @@ from landscape_test import *
 import pygame
 import random as rd
 from creature_repo import *
+from events import *
 
 # init()
 
@@ -12,12 +13,12 @@ clock.tick(FPS)
 
 # 地图的大小
 
-h=800
-w=800
+h = 800
+w = 800
 
-#地图
+# 地图
 
-game_display=display.set_mode((h,w))
+game_display = display.set_mode((h, w))
 display.set_caption("simulated-ecosystem")
 land_img = image.load("Land_v1_1.png")
 game_display.blit(land_img, (0, 0))
@@ -60,44 +61,32 @@ rabbit.append(rabbit_2)
         river.append([i,j])'''
 rabbit_1.memory_data=[[7,15]]#初始记忆地块
 
-crashed=False
+# 调试用食草动物对象
+
+
+crashed = False
 
 number_of_days = 10
 
-air = Air()
-plt.figure()
-plt.ion()
+# plt.figure()
+# plt.ion()
+
 
 # world
 for day in range(number_of_days):
-    # update display
-    pygame.display.flip()
-    
-    water_plot(water_index)
+    # while not crashed:
+    #     for i in event.get():
+    #         if i.type == KEYDOWN:
+    #             if i.unicode == "q":
+    #                 crashed = True
+    #         if crashed:
+    #             exit()
 
-    # environment change
-    for i in range(800):
-        for j in range(800):
-            # carbon cycle
-            photosyn(Land_map[i][j], air)
-            respr(Land_map[i][j], air)
-            falling(Land_map[i][j])
-            decomp(Land_map[i][j], air)
-            # water cycle
-            evapo(Land_map[i][j], air)
-            #'''
-            neighbors = np.array([[1, 1], [1, -1], [-1, 1], [-1, -1]])
-            for orient in range(4):
-                [i1, j1] = [i, j] + neighbors[orient]
-                if i1==800 or i1<0 or j1==800 or j1<0:
-                    flow_off(Land_map[i][j], air)
-                else:
-                    inter_flow(Land_map[i][j], Land_map[i1][j1])
-            #''' #网格径流 运行时间长
-            p = rd.random()
-            if p > 0.333:
-                rain(air, Land_map[i][j])
-            water_index[i][j] = Land_map[i][j].orig_soil_H2O
+    pygame.display.flip()
+
+    environment_chage()
+    life()
+    print_creatures(game_display)
 
     # creatures change
     #食草系动物 
@@ -160,7 +149,5 @@ for day in range(number_of_days):
         rabbit.remove(rabbit_1)'''
     rabbit_1.thirs-=25
 
-
-
-plt.ioff()
+# plt.ioff()
 pygame.quit()
