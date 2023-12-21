@@ -5,7 +5,7 @@ import random as rd
 from creature import *
 from events import *
 
-# init()
+init()
 
 FPS = 60  # 帧率
 clock = time.Clock()  # 时钟对象
@@ -76,80 +76,80 @@ number_of_days = 100
 
 # world
 for day in range(number_of_days):
-    # while not crashed:
-    #     for i in event.get():
-    #         if i.type == KEYDOWN:
-    #             if i.unicode == "q":
-    #                 crashed = True
-    #         if crashed:
-    #             exit()
+    while not crashed:
+        for i in event.get():
+            if i.type == KEYDOWN:
+                if i.unicode == "q":
+                    crashed = True
+        if crashed:
+            exit()
 
-    pygame.display.flip()
+        pygame.display.flip()
+        clock.tick(60)
+        environment_chage()
+        life()
+        print_creatures(game_display)
 
-    environment_chage()
-    life()
-    print_creatures(game_display)
-
-    # # creatures change
-    # #食草系动物
-    # #输出1：年龄改变+返回值 （年龄增长）
-    # #输出2：体重，储存能量   （生长）
-    # #输出3：是否有天敌  最近的天敌位置   （危险察觉）
-    # #输出4.1：存活情况 能量消耗 能量储存  位置  记忆地块（察觉到危险后逃跑）
-    # #输出4.2：位置   能量储存  能量消耗    记忆地块（没有危险，饥饿时的摄食行为）
-    # #输出4.3：位置，目标，渴度
-    # #输出4.4：是否有对象  对象位置  位置  是否怀孕（寻找配偶）
-    # #输出5：怀孕时间
-    # rabbit_1.energy_lose=0#每个time损失的能量归零
-    # rabbit_1.timemaker()#年龄增长
-    # rabbit_1.partnership()#发情期判定
-    # print(rabbit_1.age)
-    # rabbit_1.age_energy_maker()#生长
-    # print(rabbit_1.energyweight,rabbit_1.energystorage)
-    # rabbit_1.enermy_is,rabbit_1.enermy_mem=rabbit_1.see(rabbit_1.enermy)#检索周围，是否有天敌
-    # print(rabbit_1.enermy_is,rabbit_1.enermy_mem.setting)
-    # if rabbit_1.enermy_is==1:#如果有天敌，开始逃跑
-    #     if (rabbit_1.bear>=25)&(rabbit_1.enermy_mem.bear>=25):#如果双方都有耐力值剩余，两者以2倍速度展开追逐
-    #         rabbit_1.no_is=rabbit_1.escape(rabbit_1.enermy_mem,2*rabbit_1.speed,2*rabbit_1.enermy_mem.speed)
-    #         rabbit_1.bear_dec()
-    #         rabbit_1.enermy_mem.bear_dec()
-    #     elif (rabbit_1.bear<25)&(rabbit_1.enermy_mem.bear>=25):
-    #         rabbit_1.no_is=rabbit_1.escape(rabbit_1.enermy_mem,rabbit_1.speed,2*rabbit_1.enermy_mem.speed)
-    #         rabbit_1.enermy_mem.bear_dec()
-    #     elif (rabbit_1.bear>=25)&(rabbit_1.enermy_mem.bear<25):
-    #         rabbit_1.no_is=rabbit_1.escape(rabbit_1.enermy_mem,2*rabbit_1.speed,rabbit_1.enermy_mem.speed)
-    #         rabbit_1.bear_dec()
-    #     elif (rabbit_1.bear<25)&(rabbit_1.enermy_mem.bear<25):#如果双方都没有耐力值剩余，两者以最大速度展开追逐
-    #         rabbit_1.no_is=rabbit_1.escape(rabbit_1.enermy_mem,rabbit_1.speed,rabbit_1.enermy_mem.speed)
-    #     rabbit_1.memory(river)#记忆可能遇到的水源
-    #     print(rabbit_1.no_is,rabbit_1.energy_lose,rabbit_1.energystorage,rabbit_1.setting,rabbit_1.memory_data)
-    # elif rabbit_1.energystorage<=50:#如果储存的能量不足，开始觅食运动
-    #     rabbit_1.hungry_is=1
-    #     rabbit_1.walk()#随机运动
-    #     rabbit_1.memory(river)#记忆可能遇到的水源
-    #     rabbit_1.eatgrass(Land_map)#获取地块上的全部能量**********
-    #     print(rabbit_1.setting,rabbit_1.energystorage,rabbit_1.energy_lose,rabbit_1.memory_data)
-    # elif rabbit_1.thirs<=30:#如果水分不足，开始觅水
-    #     target=rabbit_1.seekforwater()
-    #     rabbit_1.runforwater(target)
-    #     print(rabbit_1.setting,target,rabbit_1.thirs)
-    # elif rabbit_1.partner_is==1:#如果处于发情期，开始寻找配偶
-    #     rabbit_1.walk()#随机运动
-    #     rabbit_1.memory(river)#记忆可能遇到的水源
-    #     rabbit_1.part_is,rabbit_1.part_mem=rabbit_1.seeforpart_mem(rabbit)#寻找周围环境中可能存在的配偶
-    #     rabbit_1.sex(rabbit_1.part_mem)
-    #     print(rabbit_1.part_is,rabbit_1.part_mem.setting,rabbit_1.setting,rabbit_1.baby_is)
-    # if rabbit_1.baby_is==1:#如果怀孕，孩子的年龄孕期增加
-    #     rabbit_1.babygrow()
-    #     print(rabbit_1.baby_time)
-    # rabbit_1.thirsty()#每time结束，扣除一点渴觉
-    # if rabbit_1.thirs<=0:
-    #     rabbit_1.no_is=0
-    # if rabbit_1.energystorage<=0:
-    #     rabbit_1.no_is=0
-    # '''if rabbit_1.no_is==0:
-    #     rabbit.remove(rabbit_1)'''
-    # rabbit_1.thirs-=25
+        # # creatures change
+        # #食草系动物
+        # #输出1：年龄改变+返回值 （年龄增长）
+        # #输出2：体重，储存能量   （生长）
+        # #输出3：是否有天敌  最近的天敌位置   （危险察觉）
+        # #输出4.1：存活情况 能量消耗 能量储存  位置  记忆地块（察觉到危险后逃跑）
+        # #输出4.2：位置   能量储存  能量消耗    记忆地块（没有危险，饥饿时的摄食行为）
+        # #输出4.3：位置，目标，渴度
+        # #输出4.4：是否有对象  对象位置  位置  是否怀孕（寻找配偶）
+        # #输出5：怀孕时间
+        # rabbit_1.energy_lose=0#每个time损失的能量归零
+        # rabbit_1.timemaker()#年龄增长
+        # rabbit_1.partnership()#发情期判定
+        # print(rabbit_1.age)
+        # rabbit_1.age_energy_maker()#生长
+        # print(rabbit_1.energyweight,rabbit_1.energystorage)
+        # rabbit_1.enermy_is,rabbit_1.enermy_mem=rabbit_1.see(rabbit_1.enermy)#检索周围，是否有天敌
+        # print(rabbit_1.enermy_is,rabbit_1.enermy_mem.setting)
+        # if rabbit_1.enermy_is==1:#如果有天敌，开始逃跑
+        #     if (rabbit_1.bear>=25)&(rabbit_1.enermy_mem.bear>=25):#如果双方都有耐力值剩余，两者以2倍速度展开追逐
+        #         rabbit_1.no_is=rabbit_1.escape(rabbit_1.enermy_mem,2*rabbit_1.speed,2*rabbit_1.enermy_mem.speed)
+        #         rabbit_1.bear_dec()
+        #         rabbit_1.enermy_mem.bear_dec()
+        #     elif (rabbit_1.bear<25)&(rabbit_1.enermy_mem.bear>=25):
+        #         rabbit_1.no_is=rabbit_1.escape(rabbit_1.enermy_mem,rabbit_1.speed,2*rabbit_1.enermy_mem.speed)
+        #         rabbit_1.enermy_mem.bear_dec()
+        #     elif (rabbit_1.bear>=25)&(rabbit_1.enermy_mem.bear<25):
+        #         rabbit_1.no_is=rabbit_1.escape(rabbit_1.enermy_mem,2*rabbit_1.speed,rabbit_1.enermy_mem.speed)
+        #         rabbit_1.bear_dec()
+        #     elif (rabbit_1.bear<25)&(rabbit_1.enermy_mem.bear<25):#如果双方都没有耐力值剩余，两者以最大速度展开追逐
+        #         rabbit_1.no_is=rabbit_1.escape(rabbit_1.enermy_mem,rabbit_1.speed,rabbit_1.enermy_mem.speed)
+        #     rabbit_1.memory(river)#记忆可能遇到的水源
+        #     print(rabbit_1.no_is,rabbit_1.energy_lose,rabbit_1.energystorage,rabbit_1.setting,rabbit_1.memory_data)
+        # elif rabbit_1.energystorage<=50:#如果储存的能量不足，开始觅食运动
+        #     rabbit_1.hungry_is=1
+        #     rabbit_1.walk()#随机运动
+        #     rabbit_1.memory(river)#记忆可能遇到的水源
+        #     rabbit_1.eatgrass(Land_map)#获取地块上的全部能量**********
+        #     print(rabbit_1.setting,rabbit_1.energystorage,rabbit_1.energy_lose,rabbit_1.memory_data)
+        # elif rabbit_1.thirs<=30:#如果水分不足，开始觅水
+        #     target=rabbit_1.seekforwater()
+        #     rabbit_1.runforwater(target)
+        #     print(rabbit_1.setting,target,rabbit_1.thirs)
+        # elif rabbit_1.partner_is==1:#如果处于发情期，开始寻找配偶
+        #     rabbit_1.walk()#随机运动
+        #     rabbit_1.memory(river)#记忆可能遇到的水源
+        #     rabbit_1.part_is,rabbit_1.part_mem=rabbit_1.seeforpart_mem(rabbit)#寻找周围环境中可能存在的配偶
+        #     rabbit_1.sex(rabbit_1.part_mem)
+        #     print(rabbit_1.part_is,rabbit_1.part_mem.setting,rabbit_1.setting,rabbit_1.baby_is)
+        # if rabbit_1.baby_is==1:#如果怀孕，孩子的年龄孕期增加
+        #     rabbit_1.babygrow()
+        #     print(rabbit_1.baby_time)
+        # rabbit_1.thirsty()#每time结束，扣除一点渴觉
+        # if rabbit_1.thirs<=0:
+        #     rabbit_1.no_is=0
+        # if rabbit_1.energystorage<=0:
+        #     rabbit_1.no_is=0
+        # '''if rabbit_1.no_is==0:
+        #     rabbit.remove(rabbit_1)'''
+        # rabbit_1.thirs-=25
 
 # plt.ioff()
 pygame.quit()
