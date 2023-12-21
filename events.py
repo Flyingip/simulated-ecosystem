@@ -1,7 +1,6 @@
-from creature_repo import *
+from creature import *
 from land import *
 from landscape_test import *
-import pygame
 
 
 landscape = [[[] * 4] * 800] * 800
@@ -22,9 +21,9 @@ rabbit = []
 
 wolf_1 = biology(2, 4, 1, 10, 5, 100, 100, [2, 1], rabbit, "none", wolf)
 rabbit_1 = biology(
-    3, 5, 2.5, 10, 5, 100, 100, [5, 60], "grass", wolf, rabbit
+    3, 5, 2.5, 10, 5, 100, 100, [50, 60], "grass", wolf, rabbit
 )  # 分别代表生物的运动能力，感知范围，年龄,寿命,幼年体重,初始体重，初始储存能量,初始位置，食物,天敌,族群
-rabbit_2 = biology(3, 5, 2.5, 10, 5, 100, 100, [5, 59], "grass", wolf, rabbit)
+rabbit_2 = biology(3, 5, 2.5, 10, 5, 100, 100, [40, 50], "grass", wolf, rabbit)
 
 rabbit_2.partner_is = 1
 wolf.append(wolf_1)
