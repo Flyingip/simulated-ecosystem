@@ -25,7 +25,7 @@ from landscape_test import *
 #             if p > 0.333:
 #                 rain(air, Land_map[i][j])
 #             water_index[i][j] = Land_map[i][j].orig_soil_H2O
-river = []  ###
+# river = []  ###
 
 rabbit = []
 wolf = []
@@ -41,15 +41,7 @@ for j in range(10):
 
 
 # 食肉系动物
-# 输出1：年龄改变+返回值 （年龄增长）
-# 输出2：体重，储存能量   （生长）
-# 输出3：是否有天敌  最近的天敌位置   （危险察觉）
-# 输出4.1：存活情况 能量消耗 能量储存  位置  记忆地块（察觉到危险后逃跑）
-# 输出4.2：位置   能量储存  能量消耗    记忆地块（没有危险，饥饿时的摄食行为）
-# 输出4.3：位置，目标，渴度
-# 输出4.4：是否有对象  对象位置  位置  是否怀孕（寻找配偶）
-# 输出5：怀孕时间
-def neuron(creature, Land_map):
+def neuron(creature, Land_map, river):
     creature.energy_lose = 0  # 每个time损失的能量归零
     creature.timemaker()  # 年龄增长
     creature.partnership()  # 发情期判定
@@ -122,9 +114,6 @@ def neuron(creature, Land_map):
 
 def print_creatures(game_display):
     for creature in rabbit:
-        creature.draw(game_display)
-
-
-# def clear_creatures(game_display):
-#     for creature in rabbit:
-#         creature.draw(game_display)
+        creature.draw(game_display, (255, 0, 0),3)
+    for creature in wolf:
+        creature.draw(game_display, (0, 255, 0),5)

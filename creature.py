@@ -46,15 +46,8 @@ class biology:
         self.baby_time = 0  # 怀孕时间
         self.bio = bio
 
-        self.size = 5
-
-    def draw(self, gameDisplay):
-        # global rabbit
-        # global wolf
-        # if self.bio == rabbit:
-        #     draw.circle(gameDisplay, (0, 0, 0), self.setting, self.size)
-        # if self.bio == wolf:
-        draw.circle(gameDisplay, (0, 255, 0), self.setting, self.size)
+    def draw(self, gameDisplay,colour,size):
+        draw.circle(gameDisplay, colour, self.setting, size)
 
     def timemaker(self):
         self.time = self.age * 100

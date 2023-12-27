@@ -8,7 +8,7 @@ from events import *
 init()
 
 
-FPS = 20  # 帧率
+FPS = 5  # 帧率
 clock = time.Clock()  # 时钟对象
 clock.tick(FPS)
 
@@ -22,7 +22,6 @@ w = 800
 game_display = display.set_mode((h, w))
 display.set_caption("simulated-ecosystem")
 land_img = image.load("Land_v1_1.png")
-game_display.blit(land_img, (0, 0))
 
 # 地图数据 初始化
 river = []  # 水源地块
@@ -69,11 +68,12 @@ for day in range(number_of_days):
         pygame.display.flip()
         clock.tick(60)
         # environment_chage(Land_map)
+        game_display.blit(land_img, (0, 0))
 
         for creature in wolf:
-            neuron(creature)
+            neuron(creature, Land_map, river)
         for creature in rabbit:
-            neuron(creature)
+            neuron(creature, Land_map, river)
 
         # life()
         # game_display.fill((255, 255, 255))
