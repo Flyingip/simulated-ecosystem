@@ -1,6 +1,5 @@
-import numpy as np
-import math
 from pygame import *
+import numpy as np
 
 
 class biology:
@@ -32,7 +31,7 @@ class biology:
         self.enermy = enermy
         self.memory_data = []
         self.thirs = 100  # 渴值
-        self.hungry_is = 1  # 是否饥饿
+        self.hungry_is = 0  # 是否饥饿
         self.seekis = 0  # 是否开始寻找
         self.enermy_is = 0  # 周围是否有天敌
         self.enermy_mem = 0  # 最近的天敌
@@ -47,11 +46,15 @@ class biology:
         self.baby_time = 0  # 怀孕时间
         self.bio = bio
 
-        self.color = (0, 0, 0)
         self.size = 5
 
     def draw(self, gameDisplay):
-        draw.circle(gameDisplay, self.color, self.setting, self.size)
+        # global rabbit
+        # global wolf
+        # if self.bio == rabbit:
+        #     draw.circle(gameDisplay, (0, 0, 0), self.setting, self.size)
+        # if self.bio == wolf:
+        draw.circle(gameDisplay, (0, 255, 0), self.setting, self.size)
 
     def timemaker(self):
         self.time = self.age * 100
@@ -92,6 +95,10 @@ class biology:
                 if a <= self.speed:
                     b.append([i, j])
         c = np.random.randint(0, len(b))
+        if b[c][0] < 0:
+            b[c][0] += 800
+        elif b[c][1] < 0:
+            b[c][1] += 800
         self.setting = b[c]
         self.energy_lose += self.speed
         self.energystorage -= self.speed
@@ -140,7 +147,7 @@ class biology:
                     d = i
             return 1, d
 
-    def seeforpart_mem(self, cate):  # 搜索函数
+    def seeforpart_mem(self, cate):  # 搜索对象的函数
         b = []
         no = biology(0, 0, 0, 0, 0, 0, 0, [0, 0], "none", "none", "none")
         for i in range(
@@ -195,38 +202,52 @@ class biology:
             self.bear = 0
             self.quick_is = 0
 
-    """def predation(self,food,speed_s,speed_i):#捕食过程
-        a=((food.setting[0]-self.setting[0])**2+(food.setting[1]-self.setting[1])**2)**0.5
-        if a<=(speed_s-speed_i):
-            self.setting=food.setting
+    def predation(self, food, speed_s, speed_i):  # 捕食过程
+        b = []
+        a = (
+            (food.setting[0] - self.setting[0]) ** 2
+            + (food.setting[1] - self.setting[1]) ** 2
+        ) ** 0.5
+        if a <= (speed_s - speed_i):
+            self.setting = food.setting
             return 1
         else:
-            for i in range(self.setting[0]-speed_s,self.setting[0]+speed_s+1):
-                for j in range(self.setting[1]-speed_s,self.setting[1]+speed_s+1):
-                    c=((i-self.setting[0])**2+(j-self.setting[1])**2)**(0.5)
-                    if c<=speed_s:
-                        b.append([i,j])
-            n=b[0]
+            for i in range(self.setting[0] - speed_s, self.setting[0] + speed_s + 1):
+                for j in range(
+                    self.setting[1] - speed_s, self.setting[1] + speed_s + 1
+                ):
+                    c = ((i - self.setting[0]) ** 2 + (j - self.setting[1]) ** 2) ** (
+                        0.5
+                    )
+                    if c <= speed_s:
+                        b.append([i, j])
+            n = b[0]
             for m in b:
-                d=((m[0]-food.setting[0])**2+(m[1]-food.setting[1])**2)**(0.5)
-                e=((n[0]-food.setting[0])**2+(n[1]-food.setting[1])**2)**(0.5)
-                if d<=e:
-                    n=m
-            self.setting=n
-            return 0"""
+                d = ((m[0] - food.setting[0]) ** 2 + (m[1] - food.setting[1]) ** 2) ** (
+                    0.5
+                )
+                e = ((n[0] - food.setting[0]) ** 2 + (n[1] - food.setting[1]) ** 2) ** (
+                    0.5
+                )
+                if d <= e:
+                    n = m
+            self.setting = n
+            return 0
 
     def escape(self, enermy, speed_s, speed_i):  # 逃跑过程
         a = (
             (enermy.setting[0] - self.setting[0]) ** 2
             + (enermy.setting[1] - self.setting[1]) ** 2
         ) ** 0.5
-        enermy.food_is, enermy.food_mem = enermy.see(enermy.food)
         if (
             (a <= (speed_i - speed_s))
             & (enermy.food_is == 1)
             & (enermy.food_mem == self)
             & (enermy.hungry_is == 1)
         ):
+            enermy.energystorage += self.energystorage
+            enermy.energystorage += self.energyweight
+            enermy.energy_lose += speed_i
             self.energyweight = 0
             self.energystorage = 0
             self.energy_lose += speed_s
@@ -312,11 +333,10 @@ class biology:
         else:
             return 0, c
 
-
-    def eatgrass(self,grass):
-        self.energystorage+=grass[self.setting[0]][self.setting[1]].orig_plant_C
-        #grass[self.setting[0]][self.setting[1]]=0
-        grass[self.setting[0]][self.setting[1]].orig_plant_C=0
+    def eatgrass(self, grass):
+        self.energystorage += grass[self.setting[0]][self.setting[1]].orig_plant_C
+        # grass[self.setting[0]][self.setting[1]]=0
+        grass[self.setting[0]][self.setting[1]].orig_plant_C = 0
 
     def partnership(self):
         if (
@@ -338,7 +358,7 @@ class biology:
             target.partner_is = 0
 
     def babygrow(self):
-        self.baby_time += 25
+        self.baby_time += 1
         if self.baby_time >= 5 * self.ageaverage:
             self.bio.append(
                 biology(
