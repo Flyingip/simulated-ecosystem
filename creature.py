@@ -46,7 +46,10 @@ class biology:
         self.baby_time = 0  # 怀孕时间
         self.bio = bio
 
-    def draw(self, gameDisplay,colour,size):
+    def getpos(self):
+        return self.setting
+
+    def draw(self, gameDisplay, colour, size):
         draw.circle(gameDisplay, colour, self.setting, size)
 
     def timemaker(self):

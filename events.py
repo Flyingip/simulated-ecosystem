@@ -112,8 +112,12 @@ def neuron(creature, Land_map, river):
         creature.bio.remove(creature)
 
 
+image_rabbit = image.load("rabbit2.png")
+
+
 def print_creatures(game_display):
     for creature in rabbit:
-        creature.draw(game_display, (255, 0, 0),3)
+        game_display.blit(image_rabbit, creature.getpos())
+        # creature.draw(game_display, rabbit)
     for creature in wolf:
-        creature.draw(game_display, (0, 255, 0),5)
+        creature.draw(game_display, (0, 255, 0), 5)
