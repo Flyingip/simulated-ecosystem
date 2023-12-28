@@ -8,7 +8,7 @@ from events import *
 init()
 
 
-FPS = 5  # 帧率
+FPS = 20  # 帧率
 clock = time.Clock()  # 时钟对象
 clock.tick(FPS)
 
@@ -30,7 +30,9 @@ Land_map = [[Land(0) for _ in range(800)] for _ in range(800)]
 landscape_index = np.zeros((800, 800))
 water_index = np.zeros((800, 800))
 resc_prodc = np.zeros((800, 800))
-# river = []  # 水源地块
+
+game_display.blit(land_img, (0, 0))
+
 for i in range(0, 800):
     for j in range(0, 800):
         landscape[i][j] = game_display.get_at((j, i))  # 获取像素点颜色
@@ -54,7 +56,11 @@ number_of_days = 10000
 # plt.figure()
 # plt.ion()
 
-
+spwan(river)
+pre_num = []
+pra_num = []
+daylist = []
+ave_rab_sig = []
 # world
 for day in range(number_of_days):
     while not crashed:
@@ -75,10 +81,23 @@ for day in range(number_of_days):
         for creature in rabbit:
             neuron(creature, Land_map, river)
 
-        # life()
-        # game_display.fill((255, 255, 255))
         print_creatures(game_display)
         print(len(rabbit))
+        if len(rabbit) <= 7:
+            for a in rabbit:
+                print(a.age, a.energystorage, a.thirs)
+        # print(len(river))
 
-# plt.ioff()
+        pre_num.append(len(rabbit))
+        pra_num.append(len(wolf))
+
+        average = []
+        for r in rabbit:
+            average.append(r.visibility)
+
+        print(sum(average) / len(rabbit))
+
+        ave_rab_sig.append(sum(average) / len(rabbit))
+        plot_stats(pre_num, pra_num, ave_rab_sig)
+        
 pygame.quit()

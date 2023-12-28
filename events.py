@@ -2,42 +2,66 @@ from creature import *
 from land import *
 from landscape_test import *
 
-# def environment_chage(Land_map):
-#     for i in range(800):
-#         for j in range(800):
-#             # carbon cycle
-#             photosyn(Land_map[i][j], air)
-#             respr(Land_map[i][j], air)
-#             falling(Land_map[i][j])
-#             decomp(Land_map[i][j], air)
-#             # water cycle
-#             evapo(Land_map[i][j], air)
-#             #'''
-#             neighbors = np.array([[1, 1], [1, -1], [-1, 1], [-1, -1]])
-#             for orient in range(4):
-#                 [i1, j1] = [i, j] + neighbors[orient]
-#                 if i1 == 800 or i1 < 0 or j1 == 800 or j1 < 0:
-#                     flow_off(Land_map[i][j], air)
-#                 else:
-#                     inter_flow(Land_map[i][j], Land_map[i1][j1])
-#             #''' #网格径流 运行时间长
-#             p = rd.random()
-#             if p > 0.333:
-#                 rain(air, Land_map[i][j])
-#             water_index[i][j] = Land_map[i][j].orig_soil_H2O
+air = Air()
+
+
+def environment_chage(Land_map):
+    for i in range(800):
+        for j in range(800):
+            # carbon cycle
+            photosyn(Land_map[i][j], air)
+            respr(Land_map[i][j], air)
+            falling(Land_map[i][j])
+            decomp(Land_map[i][j], air)
+            # water cycle
+            evapo(Land_map[i][j], air)
+            #'''
+            neighbors = np.array([[1, 1], [1, -1], [-1, 1], [-1, -1]])
+            for orient in range(4):
+                [i1, j1] = [i, j] + neighbors[orient]
+                if i1 == 800 or i1 < 0 or j1 == 800 or j1 < 0:
+                    flow_off(Land_map[i][j], air)
+                else:
+                    inter_flow(Land_map[i][j], Land_map[i1][j1])
+            #''' #网格径流 运行时间长
+            # p = rd.random()
+            # if p > 0.333:
+            #     rain(air, Land_map[i][j])
+            # water_index[i][j] = Land_map[i][j].orig_soil_H2O
+
+
 # river = []  ###
 
 rabbit = []
 wolf = []
-# 群体
-for i in range(20):
-    a = np.random.randint(0, 800)
-    b = np.random.randint(0, 800)
-    rabbit.append(biology(3, 5, 2.5, 10, 5, 100, 100, [a, b], "grass", wolf, rabbit))
-for j in range(10):
-    a = np.random.randint(0, 800)
-    b = np.random.randint(0, 800)
-    wolf.append(biology(2, 4, 1, 10, 5, 100, 100, [a, b], rabbit, "none", wolf))
+
+
+def spwan(river):
+    # 群体
+    for i in range(40):
+        a = np.random.randint(0, 800)
+        b = np.random.randint(0, 800)
+        c = biology(
+            10,
+            np.random.randint(10, 80),
+            2.5,
+            10,
+            5,
+            100,
+            100,
+            [a, b],
+            "grass",
+            wolf,
+            rabbit,
+        )
+        c.memory_data.append(river[np.random.randint(26163)])
+        rabbit.append(c)
+    for j in range(10):
+        a = np.random.randint(0, 800)
+        b = np.random.randint(0, 800)
+        c = biology(20, 60, 2.5, 10, 5, 100, 100, [a, b], rabbit, "none", wolf)
+        c.memory_data.append(river[np.random.randint(26163)])
+        wolf.append(c)
 
 
 # 食肉系动物
@@ -46,6 +70,8 @@ def neuron(creature, Land_map, river):
     creature.timemaker()  # 年龄增长
     creature.partnership()  # 发情期判定
     creature.age_energy_maker()  # 生长
+    if creature.energystorage > 50:  # 如果储存的能量不足，开始觅食运动
+        creature.hungry_is = 0
     if creature.enermy != "none":
         creature.enermy_is, creature.enermy_mem = creature.see(
             creature.enermy
@@ -84,9 +110,12 @@ def neuron(creature, Land_map, river):
             creature.eatgrass(Land_map)  # 获取地块上的全部能量
         else:
             creature.food_is, creature.food_mem = creature.see(creature.food)
-            creature.predation(
-                creature.food_mem, creature.speed, creature.food_mem.speed
-            )
+            if creature.food_mem.food != "none":
+                creature.predation(
+                    creature.food_mem, creature.speed, creature.food_mem.speed
+                )
+            else:
+                creature.walk()
             creature.memory(river)  # 记忆可能遇到的水源
     elif creature.thirs <= 30:  # 如果水分不足，开始觅水
         target = creature.seekforwater()
@@ -120,4 +149,17 @@ def print_creatures(game_display):
         game_display.blit(image_rabbit, creature.getpos())
         # creature.draw(game_display, rabbit)
     for creature in wolf:
-        creature.draw(game_display, (0, 255, 0), 5)
+        creature.draw(game_display, (0, 0, 255), 5)
+
+
+def plot_stats(prey_stats, predator_stats, ave):
+    plt.close()
+    global fig, ax1, ax2
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+
+    ax1.plot(prey_stats, label="Prey")
+    ax1.plot(predator_stats, label="Predator")
+    ax2.plot(ave, label="average_sight")
+    plt.legend()
+    plt.grid(True)
+    plt.pause(0.1)

@@ -93,11 +93,15 @@ class biology:
         c = np.random.randint(0, len(b))
         if b[c][0] < 0:
             b[c][0] += 800
-        elif b[c][1] < 0:
+        if b[c][1] < 0:
             b[c][1] += 800
+        if b[c][0] > 799:
+            b[c][0] -= 800
+        if b[c][1] > 799:
+            b[c][1] -= 800
         self.setting = b[c]
-        self.energy_lose += self.speed
-        self.energystorage -= self.speed
+        # self.energy_lose += self.speed
+        self.energystorage -= self.speed * 0.1
 
     def seekfor(self):  # 刚开始饥饿运动时，要先确定寻找的方向
         pass
@@ -336,8 +340,8 @@ class biology:
 
     def partnership(self):
         if (
-            (self.age >= self.ageaverage * 0.2)
-            & (self.age <= self.ageaverage * 0.3)
+            (self.age >= self.ageaverage * 0.1)
+            & (self.age <= self.ageaverage * 0.8)
             & (self.baby_is == 0)
         ):
             self.partner_is = 1
@@ -355,22 +359,22 @@ class biology:
 
     def babygrow(self):
         self.baby_time += 1
-        if self.baby_time >= 5 * self.ageaverage:
-            self.bio.append(
-                biology(
-                    self.speed,
-                    self.visibility,
-                    0,
-                    self.ageaverage,
-                    self.authenweight,
-                    self.authenweight,
-                    0.5 * self.energystorage,
-                    self.setting,
-                    self.food,
-                    self.enermy,
-                    self.bio,
-                )
+        if self.baby_time >= 2 * self.ageaverage:
+            a = biology(
+                self.speed,
+                self.visibility,
+                0,
+                self.ageaverage,
+                self.authenweight,
+                self.authenweight,
+                0.5 * self.energystorage,
+                self.setting,
+                self.food,
+                self.enermy,
+                self.bio,
             )
+            a.memory_data = self.memory_data
+            self.bio.append(a)
             self.energyweight -= self.authenweight
             self.energyweight = self.energyweight * 0.5
             self.baby_is = 0
