@@ -1,6 +1,7 @@
 from creature import *
 from land import *
 from landscape_test import *
+import pygame
 
 air = Air()
 
@@ -38,12 +39,12 @@ wolf = []
 
 def spwan(river):
     # 群体
-    for i in range(40):
+    for i in range(20):
         a = np.random.randint(0, 800)
         b = np.random.randint(0, 800)
         c = biology(
             10,
-            np.random.randint(10, 80),
+            np.random.randint(10, 120),
             2.5,
             10,
             5,
@@ -59,18 +60,17 @@ def spwan(river):
     for j in range(10):
         a = np.random.randint(0, 800)
         b = np.random.randint(0, 800)
-        c = biology(20, 60, 2.5, 10, 5, 100, 100, [a, b], rabbit, "none", wolf)
+        c = biology(20, 100, 2.5, 10, 5, 100, 100, [a, b], rabbit, "none", wolf)
         c.memory_data.append(river[np.random.randint(26163)])
         wolf.append(c)
 
 
-# 食肉系动物
 def neuron(creature, Land_map, river):
     creature.energy_lose = 0  # 每个time损失的能量归零
     creature.timemaker()  # 年龄增长
     creature.partnership()  # 发情期判定
     creature.age_energy_maker()  # 生长
-    if creature.energystorage > 50:  # 如果储存的能量不足，开始觅食运动
+    if creature.energystorage > 70:  # 如果储存的能量不足，开始觅食运动
         creature.hungry_is = 0
     if creature.enermy != "none":
         creature.enermy_is, creature.enermy_mem = creature.see(
@@ -101,13 +101,13 @@ def neuron(creature, Land_map, river):
             creature.no_is = creature.escape(
                 creature.enermy_mem, creature.speed, creature.enermy_mem.speed
             )
-        creature.memory(river)  # 记忆可能遇到的水源
-    elif creature.energystorage <= 50:  # 如果储存的能量不足，开始觅食运动
+        # creature.memory(river)  # 记忆可能遇到的水源,天敌追逐不要记了逃命重要
+    elif creature.energystorage <= 70:  # 如果储存的能量不足，开始觅食运动
         creature.hungry_is = 1
         if creature.food == "grass":
             creature.walk()  # 随机运动
             creature.memory(river)  # 记忆可能遇到的水源
-            creature.eatgrass(Land_map)  # 获取地块上的全部能量
+            Land_map = creature.eatgrass(Land_map)  # 获取地块上的全部能量
         else:
             creature.food_is, creature.food_mem = creature.see(creature.food)
             if creature.food_mem.food != "none":
@@ -139,22 +139,40 @@ def neuron(creature, Land_map, river):
         creature.no_is = 0
     if creature.no_is == 0:
         creature.bio.remove(creature)
+    return Land_map
 
 
 image_rabbit = image.load("rabbit2.png")
 
 
-def print_creatures(game_display):
+def print_creatures(game_display, transparent_surface):
     for creature in rabbit:
-        game_display.blit(image_rabbit, creature.getpos())
+        creature.draw_transparent(transparent_surface, (255, 255, 255, 64))  # 感知圈 # 感知圈
+        if creature.energystorage <= 10:  # 濒死
+            creature.draw(game_display, (255, 125, 255), 4)
+        elif creature.hungry_is == 1:
+            creature.draw(game_display, (255, 255, 0), 4)
+        else:
+            creature.draw(game_display, (0, 255, 255), 4)
+
+        # game_display.blit(image_rabbit, creature.getpos())
         # creature.draw(game_display, rabbit)
     for creature in wolf:
-        creature.draw(game_display, (0, 0, 255), 5)
+        creature.draw_transparent(transparent_surface, (255, 255, 255, 64))  # 感知圈 # 感知圈
+        if creature.energystorage <= 10:  # 濒死
+            creature.draw(game_display, (255, 0, 255), 5)
+            creature.draw(game_display, (0, 0, 0), 3)
+        elif creature.hungry_is == 1:
+            creature.draw(game_display, (255, 0, 0), 5)
+            creature.draw(game_display, (0, 0, 0), 3)
+        else:
+            creature.draw(game_display, (0, 0, 255), 5)
+            creature.draw(game_display, (0, 0, 0), 3)
 
 
 def plot_stats(prey_stats, predator_stats, ave):
-    plt.close()
     global fig, ax1, ax2
+    plt.close()
     fig, (ax1, ax2) = plt.subplots(1, 2)
 
     ax1.plot(prey_stats, label="Prey")

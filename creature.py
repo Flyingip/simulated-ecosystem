@@ -52,6 +52,9 @@ class biology:
     def draw(self, gameDisplay, colour, size):
         draw.circle(gameDisplay, colour, self.setting, size)
 
+    def draw_transparent(self, transparent_surface, colour):
+        draw.circle(transparent_surface, colour, self.setting, self.visibility)
+
     def timemaker(self):
         self.time = self.age * 100
         self.time = self.time + 1
@@ -337,6 +340,7 @@ class biology:
         self.energystorage += grass[self.setting[0]][self.setting[1]].orig_plant_C
         # grass[self.setting[0]][self.setting[1]]=0
         grass[self.setting[0]][self.setting[1]].orig_plant_C = 0
+        return grass
 
     def partnership(self):
         if (

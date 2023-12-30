@@ -21,7 +21,12 @@ w = 800
 
 game_display = display.set_mode((h, w))
 display.set_caption("simulated-ecosystem")
-land_img = image.load("Land_v1_1.png")
+land_img = image.load("地图 01-49-57.png")
+# land_img = image.load("Land_v1_1.png")
+
+transparent_surface = pygame.Surface((800, 800), pygame.SRCALPHA)
+transparent_surface.fill((0, 0, 0, 0))  # 填充完全透明的颜色
+
 
 # 地图数据 初始化
 river = []  # 水源地块
@@ -35,7 +40,7 @@ game_display.blit(land_img, (0, 0))
 
 for i in range(0, 800):
     for j in range(0, 800):
-        landscape[i][j] = game_display.get_at((j, i))  # 获取像素点颜色
+        landscape[i][j] = game_display.get_at((i, j))  # 获取像素点颜色
         Land_map[i][j] = Land(land_comp(landscape[i][j]))  # **创建索引 建立Land对象**
         landscape_index[i][j] = Land_map[i][j].index  # 获取索引用于画图
         water_index[i][j] = Land_map[i][j].orig_soil_H2O  # 地块含水量的二维地图
@@ -48,6 +53,14 @@ for i in range(0, 800):
 # 调试用食草动物对象
 
 # init_world()
+
+
+def draw_plant(gameDisplay, resc_prodc):
+    for i in range(h):
+        for j in range(w):
+            if resc_prodc[i][j] != 0:
+                draw.circle(gameDisplay, (0, 0, 0), (i, j), 0.5 * resc_prodc[i][j])
+
 
 crashed = False
 
@@ -74,18 +87,20 @@ for day in range(number_of_days):
         pygame.display.flip()
         clock.tick(60)
         # environment_chage(Land_map)
+
         game_display.blit(land_img, (0, 0))
 
-        for creature in wolf:
-            neuron(creature, Land_map, river)
-        for creature in rabbit:
-            neuron(creature, Land_map, river)
+        # 将透明表面绘制到主显示表面上
+        transparent_surface.fill((0, 0, 0, 0))  # 填充完全透明的颜色
 
-        print_creatures(game_display)
-        print(len(rabbit))
-        if len(rabbit) <= 7:
-            for a in rabbit:
-                print(a.age, a.energystorage, a.thirs)
+        for creature in wolf:
+            Land_map = neuron(creature, Land_map, river)
+        for creature in rabbit:
+            Land_map = neuron(creature, Land_map, river)
+
+        draw_plant(game_display, resc_prodc)
+        print_creatures(game_display, transparent_surface)
+        game_display.blit(transparent_surface, (0, 0))
         # print(len(river))
 
         pre_num.append(len(rabbit))
@@ -95,9 +110,10 @@ for day in range(number_of_days):
         for r in rabbit:
             average.append(r.visibility)
 
-        print(sum(average) / len(rabbit))
-
-        ave_rab_sig.append(sum(average) / len(rabbit))
+        if len(rabbit) != 0:
+            ave_rab_sig.append(sum(average) / len(rabbit))
+        else:
+            ave_rab_sig = 0
         plot_stats(pre_num, pra_num, ave_rab_sig)
-        
+
 pygame.quit()
