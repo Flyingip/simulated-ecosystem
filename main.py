@@ -1,27 +1,28 @@
 from land import *
 from landscape_test import *
-import pygame
 import random as rd
 from creature import *
 from events import *
+import os
+import pygame
 
-init()
-
+# 改变目录
+current_file_path = os.path.abspath(__file__)
+current_dir = os.path.dirname(current_file_path)
+os.chdir(current_dir)
 
 FPS = 20  # 帧率
-clock = time.Clock()  # 时钟对象
+clock = pygame.time.Clock()  # 时钟对象
 clock.tick(FPS)
 
 # 地图的大小
-
 h = 800
 w = 800
 
 # 地图
-
 game_display = display.set_mode((h, w))
 display.set_caption("simulated-ecosystem")
-land_img = image.load("地图 01-49-57.png")
+land_img = image.load("maps/map 16-17-13.png")
 # land_img = image.load("Land_v1_1.png")
 
 transparent_surface = pygame.Surface((800, 800), pygame.SRCALPHA)
@@ -62,10 +63,6 @@ def draw_plant(gameDisplay, resc_prodc):
                 draw.circle(gameDisplay, (0, 0, 0), (i, j), 0.5 * resc_prodc[i][j])
 
 
-crashed = False
-
-number_of_days = 10000
-
 # plt.figure()
 # plt.ion()
 
@@ -75,45 +72,47 @@ pra_num = []
 daylist = []
 ave_rab_sig = []
 # world
-for day in range(number_of_days):
-    while not crashed:
-        for i in event.get():
-            if i.type == KEYDOWN:
-                if i.unicode == "q":
-                    crashed = True
-        if crashed:
-            exit()
+crashed = False
+while not crashed:
+    for event in pygame.event.get():
+        if event.type == KEYDOWN:
+            if event.unicode == "q":
+                crashed = True
+    if crashed:
+        exit()
 
-        pygame.display.flip()
-        clock.tick(60)
-        # environment_chage(Land_map)
+    pygame.display.flip()
 
-        game_display.blit(land_img, (0, 0))
+    # environment_chage(Land_map)
 
-        # 将透明表面绘制到主显示表面上
-        transparent_surface.fill((0, 0, 0, 0))  # 填充完全透明的颜色
+    game_display.blit(land_img, (0, 0))
 
-        for creature in wolf:
-            Land_map = neuron(creature, Land_map, river)
-        for creature in rabbit:
-            Land_map = neuron(creature, Land_map, river)
+    # 将透明表面绘制到主显示表面上
+    transparent_surface.fill((0, 0, 0, 0))  # 填充完全透明的颜色
 
-        draw_plant(game_display, resc_prodc)
-        print_creatures(game_display, transparent_surface)
-        game_display.blit(transparent_surface, (0, 0))
-        # print(len(river))
+    for creature in wolf:
+        Land_map = neuron(creature, Land_map, river)
+    for creature in rabbit:
+        Land_map = neuron(creature, Land_map, river)
 
-        pre_num.append(len(rabbit))
-        pra_num.append(len(wolf))
+    draw_plant(game_display, resc_prodc)
+    print_creatures(game_display, transparent_surface)
+    game_display.blit(transparent_surface, (0, 0))
+    # print(len(river))
 
-        average = []
-        for r in rabbit:
-            average.append(r.visibility)
+    pre_num.append(len(rabbit))
+    pra_num.append(len(wolf))
 
-        if len(rabbit) != 0:
-            ave_rab_sig.append(sum(average) / len(rabbit))
-        else:
-            ave_rab_sig = 0
-        plot_stats(pre_num, pra_num, ave_rab_sig)
+    average = []
+    for r in rabbit:
+        average.append(r.visibility)
+
+    if len(rabbit) != 0:
+        ave_rab_sig.append(sum(average) / len(rabbit))
+    else:
+        ave_rab_sig = 0
+    plot_stats(pre_num, pra_num, ave_rab_sig)
+
+    clock.tick(FPS)
 
 pygame.quit()

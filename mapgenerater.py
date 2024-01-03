@@ -1,15 +1,17 @@
-import pygame
 import numpy as np
 from opensimplex import OpenSimplex
 import random
 from PIL import Image
-import matplotlib.pyplot as plt
 from datetime import datetime
+import os
+
+current_file_path = os.path.abspath(__file__)
+current_dir = os.path.dirname(current_file_path)
+os.chdir(current_dir)
 
 # 地图尺寸和地块大小
 x, y = 800, 800
 control = 2
-tile_size = 1  # 每个地块的像素大小
 
 map_data = np.zeros((x, y, control))
 
@@ -24,7 +26,7 @@ def berlin(data, scale):
     image = Image.fromarray(
         np.uint8((data - np.min(data)) / (np.max(data) - np.min(data)) * 255), "L"
     )
-    image_file_path = f"berlin图 {datetime.now().strftime('%H-%M-%S')}.png"
+    image_file_path = f"maps/berlin {datetime.now().strftime('%H-%M-%S')}.png"
     image.save(image_file_path)
     return data
 
@@ -80,32 +82,5 @@ map = land_plot(index)
 image = Image.fromarray(map)
 
 # Save the image
-image_file_path = f"地图 {datetime.now().strftime('%H-%M-%S')}.png"
+image_file_path = f"maps/map {datetime.now().strftime('%H-%M-%S')}.png"
 image.save(image_file_path)
-
-# 初始化pygame
-# pygame.init()
-# 创建窗口
-# window = pygame.display.set_mode((width, height))
-# pygame.display.set_caption("Noise Map")
-
-
-# # 游戏主循环
-# running = True
-# while running:
-#     for event in pygame.event.get():
-#         if event.type == pygame.QUIT:
-#             running = False
-
-#     # 绘制地图
-#     for x in range(width):
-#         for y in range(height):
-#             pygame.draw.rect(
-#                 window,
-#                 (map_data[x, y], map_data[x, y], map_data[x, y]),
-#                 (x * tile_size, y * tile_size, tile_size, tile_size),
-#             )
-
-#     pygame.display.flip()
-
-# pygame.quit()
