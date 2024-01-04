@@ -30,7 +30,7 @@ class Land:
                 self.qualt_off = 0.5
             case 3:
                 self.land_type = "plain_forest"
-                self.qualt_H2O = 1
+                self.qualt_H2O = 1.2
                 self.qualt_resc = 1.5
                 self.qualt_metbls = 1.2
                 self.qualt_rain = 1
@@ -44,16 +44,16 @@ class Land:
                 self.qualt_off = 0.5
             case 5:
                 self.land_type = "mountain_desert"
-                self.qualt_H2O = 0.6
+                self.qualt_H2O = 0.5
                 self.qualt_resc = 0.1
                 self.qualt_metbls = 0.3
                 self.qualt_rain = 0.5
                 self.qualt_off = 1
         ###水循环部分
         self.orig_soil_H2O = self.qualt_H2O * 10  # 初始土壤水，标准为10
-        self.evapo_rate = self.qualt_off * self.orig_soil_H2O * 0.01  # 蒸发速率，标准为0.01倍水量
+        self.evapo_rate = self.qualt_off * self.orig_soil_H2O * 0.01  # 蒸发速率，标准为0.01倍水量(约10*0.01*800*800=64000)
         self.flow_rate = self.qualt_off * self.orig_soil_H2O * 0.01  # 径流速率，标准为0.01倍水量
-        self.rain_rate = self.qualt_rain * 0.5  # 降雨速率，标准为0.5
+        self.rain_rate = self.qualt_rain * 0.2  # 降雨速率，标准为0.2
         self.new_soil_H2O = self.orig_soil_H2O
         ###碳循环部分
         self.orig_plant_C = self.qualt_resc * 5  # 初始植物碳，标准为100
@@ -87,11 +87,11 @@ def flow_off(Land, Air):
 
 # 降水函数
 def rain(Air, Land):
-    rain_rate = Land.rain_rate * np.random.normal(1, 0.1, 1)
+    rain_rate = Land.rain_rate * np.random.normal(1, 0.1) #降雨速率 平均0.2 减少0.2*800*800=2*64000
     if rain_rate > 0:
-        Land.new_soil_H2O = Land.orig_soil_H2O + Land.rain_rate
+        Land.new_soil_H2O = Land.orig_soil_H2O + rain_rate
         Land.orig_soil_H2O = Land.new_soil_H2O
-        Air.new_air_H2O = Air.orig_air_H2O - Land.rain_rate
+        Air.new_air_H2O = Air.orig_air_H2O - rain_rate
         Air.orig_air_H2O = Air.new_air_H2O
 
 

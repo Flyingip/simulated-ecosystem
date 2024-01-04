@@ -135,8 +135,12 @@ def neuron(creature, Land_map, river):
     creature.thirsty()  # 每time结束，扣除一点渴觉
     if creature.thirs <= 0:
         creature.no_is = 0
+        Land_map[creature.setting[0]][creature.setting[1]] += creature.energystorage
+        Land_map[creature.setting[0]][creature.setting[1]] += creature.energyweight
     if creature.energystorage <= 0:
         creature.no_is = 0
+        Land_map[creature.setting[0]][creature.setting[1]] += creature.energystorage
+        Land_map[creature.setting[0]][creature.setting[1]] += creature.energyweight
     if creature.no_is == 0:
         creature.bio.remove(creature)
     return Land_map

@@ -8,17 +8,17 @@ import seaborn as sns
 def land_comp(rgb):
     r = [
         (1, 173, 255, 255),
-        (24, 173, 1, 255),
         (36, 255, 1, 255),
+        (24, 173, 1, 255),
         (12, 86, 1, 255),
         (231, 255, 1, 255),
         (120, 132, 1, 255),
     ]
     if rgb == (1, 173, 255, 255):
         type = 0
-    elif rgb == (24, 173, 1, 255):
-        type = 1
     elif rgb == (36, 255, 1, 255):
+        type = 1
+    elif rgb == (24, 173, 1, 255):
         type = 2
     elif rgb == (12, 86, 1, 255):
         type = 3
@@ -40,8 +40,8 @@ def land_plot(landscape_index):
     color_map = np.zeros((800, 800, 4), dtype=np.uint8)
     colors = [
         (1, 173, 255, 255),
-        (24, 173, 1, 255),
         (36, 255, 1, 255),
+        (24, 173, 1, 255), 
         (12, 86, 1, 255),
         (231, 255, 1, 255),
         (120, 132, 1, 255),
@@ -67,4 +67,20 @@ def water_plot(land_index):
     )
     plt.show()
     plt.pause(0.001)
-    plt.clf()
+    plt.close()
+
+
+def C_plot(land_index):
+    df = pd.DataFrame(land_index)
+    sns.heatmap(
+        df,
+        vmin=0,
+        vmax=18,
+        cmap="Greens",
+        annot=False,
+        xticklabels=False,
+        yticklabels=False,
+    )
+    plt.show()
+    plt.pause(0.001)
+    plt.close()
