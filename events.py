@@ -4,6 +4,7 @@ from landscape_test import *
 import pygame
 
 air = Air()
+h, w = 800, 800
 
 
 def environment_chage(Land_map):
@@ -31,13 +32,11 @@ def environment_chage(Land_map):
             # water_index[i][j] = Land_map[i][j].orig_soil_H2O
 
 
-# river = []  ###
-
-rabbit = []
-wolf = []
+# rabbit = []
+# wolf = []
 
 
-def spwan(river):
+def spwan(rabbit, wolf, river):
     # 群体
     for i in range(20):
         a = np.random.randint(0, 800)
@@ -63,6 +62,7 @@ def spwan(river):
         c = biology(20, 100, 2.5, 10, 5, 100, 100, [a, b], rabbit, "none", wolf)
         c.memory_data.append(river[np.random.randint(26163)])
         wolf.append(c)
+    return rabbit, wolf
 
 
 def neuron(creature, Land_map, river):
@@ -146,12 +146,9 @@ def neuron(creature, Land_map, river):
     return Land_map
 
 
-image_rabbit = image.load("rabbit2.png")
-
-
-def print_creatures(game_display, transparent_surface):
+def print_creatures(rabbit, wolf, game_display, transparent_surface):
     for creature in rabbit:
-        creature.draw_transparent(transparent_surface, (255, 255, 255, 64))  # 感知圈 # 感知圈
+        creature.draw_transparent(transparent_surface, (255, 255, 255, 64))  # 感知圈
         if creature.energystorage <= 10:  # 濒死
             creature.draw(game_display, (255, 125, 255), 4)
         elif creature.hungry_is == 1:
@@ -162,7 +159,7 @@ def print_creatures(game_display, transparent_surface):
         # game_display.blit(image_rabbit, creature.getpos())
         # creature.draw(game_display, rabbit)
     for creature in wolf:
-        creature.draw_transparent(transparent_surface, (255, 255, 255, 64))  # 感知圈 # 感知圈
+        creature.draw_transparent(transparent_surface, (255, 255, 255, 64))  # 感知圈
         if creature.energystorage <= 10:  # 濒死
             creature.draw(game_display, (255, 0, 255), 5)
             creature.draw(game_display, (0, 0, 0), 3)
@@ -174,14 +171,44 @@ def print_creatures(game_display, transparent_surface):
             creature.draw(game_display, (0, 0, 0), 3)
 
 
-def plot_stats(prey_stats, predator_stats, ave):
-    global fig, ax1, ax2
-    plt.close()
+def draw_plant(gameDisplay, resc_prodc):
+    for i in range(h):
+        for j in range(w):
+            if resc_prodc[i][j] != 0:
+                draw.circle(gameDisplay, (0, 0, 0), (i, j), 1 * resc_prodc[i][j])
+
+
+r_num = []
+w_num = []
+
+aver = []
+
+
+def plot_stats(rabbit, wolf):
+    global r_num, w_num, aver
+    sight = []
+    num_rabbit = len(rabbit)
+    num_wolf = len(wolf)
+    r_num.append(num_rabbit)
+    w_num.append(num_wolf)
+
+    for r in rabbit:
+        sight.append(r.visibility)
+
+    if num_rabbit != 0:
+        aver.append(sum(sight) / num_rabbit)
+    else:
+        aver = 0
+
     fig, (ax1, ax2) = plt.subplots(1, 2)
 
-    ax1.plot(prey_stats, label="Prey")
-    ax1.plot(predator_stats, label="Predator")
-    ax2.plot(ave, label="average_sight")
-    plt.legend()
-    plt.grid(True)
-    plt.pause(0.1)
+    ax1.plot(r_num, label="Rabbit")
+    ax1.plot(w_num, label="Wolf")
+    ax2.plot(aver, label="average_sight")
+
+    ax1.legend()
+    ax1.grid(True)
+    ax2.legend()
+    ax2.grid(True)
+    plt.savefig("results.pdf")
+    plt.close(fig)
