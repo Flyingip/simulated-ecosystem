@@ -54,7 +54,7 @@ def generate_landscape(noise1, noise2, river, ground, hill, peak):
 
 
 def land_plot(landscape_index):
-    color_map = np.zeros((800, 800, 4), dtype=np.uint8)
+    color_map = np.zeros((x, y, 4), dtype=np.uint8)
     colors = [
         (1, 173, 255, 255),
         (36, 255, 1, 255),
@@ -63,8 +63,8 @@ def land_plot(landscape_index):
         (231, 255, 1, 255),
         (120, 132, 1, 255),
     ]
-    for i in range(0, 800):
-        for j in range(0, 800):
+    for i in range(0, x):
+        for j in range(0, y):
             color_map[i, j, :] = colors[int(landscape_index[i, j])]
     return color_map
 
