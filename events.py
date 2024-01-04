@@ -7,7 +7,7 @@ air = Air()
 h, w = 800, 800
 
 
-def environment_chage(Land_map):
+def environment_chage(Land_map, water_index, resc_prodc):
     for i in range(800):
         for j in range(800):
             # carbon cycle
@@ -25,11 +25,13 @@ def environment_chage(Land_map):
                     flow_off(Land_map[i][j], air)
                 else:
                     inter_flow(Land_map[i][j], Land_map[i1][j1])
-            #''' #网格径流 运行时间长
-            # p = rd.random()
-            # if p > 0.333:
-            #     rain(air, Land_map[i][j])
-            # water_index[i][j] = Land_map[i][j].orig_soil_H2O
+
+            p = rd.random()
+            if p > 0.333:
+                rain(air, Land_map[i][j])
+            water_index[i][j] = Land_map[i][j].orig_soil_H2O
+    water_plot(water_index)
+    C_plot(resc_prodc)
 
 
 # rabbit = []
@@ -117,9 +119,10 @@ def neuron(creature, Land_map, river):
             else:
                 creature.walk()
             creature.memory(river)  # 记忆可能遇到的水源
-    elif creature.thirs <= 30:  # 如果水分不足，开始觅水
+    elif creature.thirs <= 60:  # 如果水分不足，开始觅水
         target = creature.seekforwater()
         creature.runforwater(target)
+        creature.memory(river)
     elif creature.partner_is == 1:  # 如果处于发情期，开始寻找配偶
         creature.walk()  # 随机运动
         creature.memory(river)  # 记忆可能遇到的水源
@@ -135,12 +138,28 @@ def neuron(creature, Land_map, river):
     creature.thirsty()  # 每time结束，扣除一点渴觉
     if creature.thirs <= 0:
         creature.no_is = 0
-        Land_map[creature.setting[0]][creature.setting[1]] += creature.energystorage
-        Land_map[creature.setting[0]][creature.setting[1]] += creature.energyweight
+        Land_map[creature.setting[0]][
+            creature.setting[1]
+        ].orig_soil_C += creature.energystorage
+        Land_map[creature.setting[0]][
+            creature.setting[1]
+        ].orig_soil_C += creature.energyweight
     if creature.energystorage <= 0:
         creature.no_is = 0
-        Land_map[creature.setting[0]][creature.setting[1]] += creature.energystorage
-        Land_map[creature.setting[0]][creature.setting[1]] += creature.energyweight
+        if creature.setting[0] < 0:
+            creature.setting[0] += 800
+        if creature.setting[1] < 0:
+            creature.setting[1] += 800
+        if creature.setting[0] > 799:
+            creature.setting[0] -= 800
+        if creature.setting[1] > 799:
+            creature.setting[1] -= 800
+        Land_map[creature.setting[0]][
+            creature.setting[1]
+        ].orig_soil_C += creature.energystorage
+        Land_map[creature.setting[0]][
+            creature.setting[1]
+        ].orig_soil_C += creature.energyweight
     if creature.no_is == 0:
         creature.bio.remove(creature)
     return Land_map

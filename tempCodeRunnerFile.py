@@ -1,2 +1,1 @@
-ure in wolf:
-        Land_
+water_plot(water_index)

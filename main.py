@@ -67,7 +67,7 @@ crashed = False
 while not crashed:
     pygame.display.flip()
 
-    # environment_chage(Land_map)
+    environment_chage(Land_map, water_index, resc_prodc)
 
     # 渲染与刷新可视化界面
 
