@@ -30,8 +30,8 @@ def environment_chage(Land_map, water_index, resc_prodc):
             if p > 0.333:
                 rain(air, Land_map[i][j])
             water_index[i][j] = Land_map[i][j].orig_soil_H2O
-    water_plot(water_index)
-    C_plot(resc_prodc)
+    # water_plot(water_index)
+    # C_plot(resc_prodc)
 
 
 # rabbit = []
